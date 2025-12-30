@@ -1,0 +1,59 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# R
+.Rhistory
+.RData
+.Rproj.user
+
+# Data files (uncomment if needed)
+# *.h5ad
+# *.h5
+# *.rds
+# *.csv
+# *.tsv
+
+# Output directories
+cnmf_output/
+output/
+outs/
+results/
+
+# Temporary files
+*.tmp
+*.log
+.DS_Store
