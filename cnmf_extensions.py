@@ -124,6 +124,8 @@ class cNMF(_cNMF_base):
                 n_top_genes=n_top_genes,
                 norm_usage=norm_usage
             )
+            # Note: spectra_tpm is loaded but not used in this method.
+            # We keep it for consistency with cNMF's load_results API.
             
             # Verify dimensions match
             if usage.shape[0] != adata.n_obs:
@@ -151,11 +153,22 @@ class cNMF(_cNMF_base):
             
             print(f"Found {len(common_genes)} common genes out of {len(adata_genes)} genes in AnnData")
             
-            # Create aligned spectra matrix
+            # Warn if too few genes match
+            if len(common_genes) < len(adata_genes) * 0.5:
+                print(f"⚠ WARNING: Only {len(common_genes)}/{len(adata_genes)} ({100*len(common_genes)/len(adata_genes):.1f}%) "
+                      f"genes match between cNMF results and AnnData.")
+                print("  This may indicate a gene naming mismatch. Please verify that gene names are consistent.")
+            
+            # Create aligned spectra matrix using vectorized operations for better performance
             spectra_aligned = np.zeros((len(adata_genes), K))
-            for i, gene in enumerate(adata_genes):
-                if gene in common_genes:
-                    spectra_aligned[i, :] = spectra_scores[gene].values
+            
+            # Create a mapping for efficient lookup
+            gene_to_idx = {gene: i for i, gene in enumerate(adata_genes)}
+            
+            # Vectorized assignment for matching genes
+            for gene in common_genes:
+                idx = gene_to_idx[gene]
+                spectra_aligned[idx, :] = spectra_scores[gene].values
             
             print(f"Adding spectra scores to adata.varm['{spectra_key}'] with shape {spectra_aligned.shape}")
             adata.varm[spectra_key] = spectra_aligned

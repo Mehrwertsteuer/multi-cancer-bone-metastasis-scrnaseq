@@ -59,9 +59,11 @@ def create_mock_cnmf_results(output_dir, name, K=5, n_cells=100, n_genes=50):
     top_genes = pd.DataFrame(top_genes_data)
     
     # Save files in the format cNMF expects
-    # cNMF uses k_%d and dt_%s format where density threshold has underscores instead of dots
+    # cNMF uses k_%d and dt_%s format where:
+    # - k_%d is the number of programs (e.g., k_5)
+    # - dt_%s is the density threshold with dots replaced by underscores (e.g., 0.1 becomes dt_0_1)
     k_str = f'k_{K}'
-    density_str = 'dt_0_1'  # density threshold 0.1
+    density_str = 'dt_0_1'  # density threshold 0.1 with dots replaced by underscores
     
     # Save files
     usage_file = results_dir / f'{name}.usages.{k_str}.{density_str}.consensus.txt'
